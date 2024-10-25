@@ -6,10 +6,20 @@ public class RythmManager : MonoBehaviour
     public float timer = 0f;
 
     public List<Beat> beats;
+    public List<GameObject> beatIcons;
 
     public bool isRecording = true;
 
+    public bool isPlaying = false;
+
     public GameObject beatPrefab;
+
+    public Transform spawnPoint;
+
+    public int xPoint;
+
+    int i = 0;
+    int j = 0;
 
     private void Start()
     {
@@ -18,8 +28,7 @@ public class RythmManager : MonoBehaviour
 
     private void Update()
     {
-        if(isRecording)
-            timer += Time.deltaTime;
+        timer += Time.deltaTime;
 
         if (Input.GetButtonDown("LeftClick") && isRecording)
         {
@@ -28,27 +37,61 @@ public class RythmManager : MonoBehaviour
             beats.Add(beat);
         }
 
-        if (timer > 10f)
+        if(Input.GetButtonDown("LeftClick") && isPlaying)
+        {
+            try
+            {
+                GameObject beatIcon = beatIcons[j];
+                Transform beatPos = beatIcon.GetComponent<Transform>();
+
+                if (beatPos.position.x >= xPoint - 1.5 && beatPos.position.x <= xPoint + 1.5)
+                {
+                    Destroy(beatIcon);
+                    j++;
+                    Debug.Log("Great!");
+                }
+                else
+                {
+                    Destroy(beatIcon);
+                    j++;
+                    Debug.Log("Miss");
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        if (timer > 10f && isRecording)
         {
             isRecording = false;
             Debug.Log("Timer stoped at " + timer);
 
             timer = 0f;
-
-            GoThroughBeats();
+            isPlaying = true;
         }
-    }
 
-    void GoThroughBeats()
-    {
-        foreach (Beat beat in beats)
+        if (isPlaying)
         {
-            Debug.Log("Time: " + beat.time);
-            GameObject beatObj = Instantiate(beatPrefab);
+            try
+            {
+                if (beats[i].time <= timer)
+                {
+                    GameObject newBeat = Instantiate(beatPrefab, spawnPoint);
 
-            Vector3 newPosition = new Vector3(beat.time - 10, 0, 0);
+                    beatIcons.Add(newBeat);
 
-            beatObj.transform.position += newPosition;
+                    i++;
+                }
+            }
+            catch
+            {
+                if(i > beats.Count)
+                {
+                    isPlaying = false;
+                }
+            }
         }
     }
 }
