@@ -467,6 +467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 937622833}
   - component: {fileID: 937622832}
+  - component: {fileID: 937622834}
   m_Layer: 0
   m_Name: RythmManager
   m_TagString: Untagged
@@ -481,16 +482,19 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 937622831}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 488a90d70eeeac44d8185a7e3ab78b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   timer: 0
   beatIcons: []
-  isRecording: 1
-  isPlaying: 0
-  beatPrefab: {fileID: 2695336747247405149, guid: 363ea8fdd4669a84dbca5bf546f990af, type: 3}
+  P1isRecording: 1
+  P2isRecording: 0
+  P2isPlaying: 0
+  P1isPlaying: 0
+  P1beatPrefab: {fileID: 2695336747247405149, guid: 363ea8fdd4669a84dbca5bf546f990af, type: 3}
+  P2beatPrefab: {fileID: 0}
   spawnPoint: {fileID: 757167167}
   xPoint: 10
 --- !u!4 &937622833
@@ -508,6 +512,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &937622834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 937622831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb28000ab8993c4ebf425ed004d6814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: 0
+  beatIcons: []
+  P1isRecording: 1
+  P2isRecording: 0
+  P2isPlaying: 0
+  P1isPlaying: 0
+  P1beatPrefab: {fileID: 2695336747247405149, guid: 363ea8fdd4669a84dbca5bf546f990af, type: 3}
+  P2beatPrefab: {fileID: 2695336747247405149, guid: 0246809247e586447be60767f2e66951, type: 3}
+  spawnPoint: {fileID: 757167167}
+  strikePoint: {fileID: 995599949}
+  xPoint: 10
 --- !u!1 &995599945
 GameObject:
   m_ObjectHideFlags: 0
