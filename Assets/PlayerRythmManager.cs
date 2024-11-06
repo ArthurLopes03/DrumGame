@@ -21,7 +21,7 @@ public class PlayerRythmManager : MonoBehaviour
     public int xPoint;
 
     public int beatsCounter = 0;
-    public int j = 0;
+    public int beatsIconCounter = 0;
 
     private void Start()
     {
@@ -43,6 +43,9 @@ public class PlayerRythmManager : MonoBehaviour
 
         if (timer > 5f && isRecording)
         {
+            beatsCounter = 0;
+            beatsIconCounter = 0;
+
             isRecording = false;
 
             timer = 0f;
@@ -56,57 +59,55 @@ public class PlayerRythmManager : MonoBehaviour
         //-----PLAYING-----
         if (Input.GetButtonDown(inputA) && isPlaying)
         {
-            try
+
+            if (beatsIconCounter < beatIcons.Count)
             {
-                GameObject beatIcon = beatIcons[j];
+                GameObject beatIcon = beatIcons[beatsIconCounter];
                 Transform beatPos = beatIcon.GetComponent<Transform>();
-
-                if (beatPos.position.x >= xPoint - 1.5 && beatPos.position.x <= xPoint + 1.5)
+                if (beatIcon != null)
                 {
-                    Destroy(beatIcon);
-                    j++;
-                    Debug.Log("Great!");
+                    if (beatPos.position.x >= xPoint - 1.5 && beatPos.position.x <= xPoint + 1.5)
+                    {
+                        Destroy(beatIcon);
+                        beatsIconCounter++;
+                        //Debug.Log("Great!");
+                    }
+                    else
+                    {
+                        Destroy(beatIcon);
+                        beatsIconCounter++;
+                        //Debug.Log("Miss");
+                    }
                 }
-                else
-                {
-                    Destroy(beatIcon);
-                    j++;
-                    Debug.Log("Miss");
-                }
-            }
-            catch
-            {
-
             }
         }
 
         if (isPlaying)
         {
-            try {
+            if (beatsCounter < beats.Count)
+            {
                 if (beats[beatsCounter].time <= timer)
                 {
-                    Debug.Log("Spawn");
-
                     GameObject newBeat = Instantiate(beatPrefab, spawnPoint);
-
+                    newBeat.GetComponent<BeatIcon>().rythmManager = this;
                     beatIcons.Add(newBeat);
 
                     beatsCounter++;
                 }
             }
-            catch 
+            else if (beatsCounter == beats.Count)
             {
-                Debug.Log("Round Over");
-                isPlaying = false;
-                Invoke("StartRound", 5);
+                Invoke("StartRound", 3f);
+                beatsCounter++;
             }
-
         }
     }
 
     public void StartRound()
     {
-        Debug.Log("New round started");
+        isPlaying = false;
+        Debug.Log("Start Round");
+        beatIcons.Clear();
         timer = 0f;
         isRecording = true;
     }
