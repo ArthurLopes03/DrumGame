@@ -8,14 +8,11 @@ public class RythmManager : MonoBehaviour
     public List<Beat> beats;
     public List<GameObject> beatIcons;
 
-    public bool P1isRecording = true;
-    public bool P2isRecording = false;
+    public bool isRecording = true;
 
-    public bool P2isPlaying = false;
-    public bool P1isPlaying = false;
+    public bool isPlaying = false;
 
-    public GameObject P1beatPrefab;
-    public GameObject P2beatPrefab;
+    public GameObject beatPrefab;
 
     public Transform spawnPoint;
 
@@ -33,14 +30,14 @@ public class RythmManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (Input.GetButtonDown("LeftClick") && P1isRecording)
+        if (Input.GetButtonDown("LeftClick") && isRecording)
         {
             Beat beat = new Beat(true, timer);
 
             beats.Add(beat);
         }
 
-        if(Input.GetButtonDown("LeftClick") && P2isPlaying)
+        if(Input.GetButtonDown("LeftClick") && isPlaying)
         {
             try
             {
@@ -66,22 +63,22 @@ public class RythmManager : MonoBehaviour
             }
         }
 
-        if (timer > 10f && P1isRecording)
+        if (timer > 10f && isRecording)
         {
-            P1isRecording = false;
+            isRecording = false;
             Debug.Log("Timer stoped at " + timer);
 
             timer = 0f;
-            P2isPlaying = true;
+            isPlaying = true;
         }
 
-        if (P2isPlaying)
+        if (isPlaying)
         {
             try
             {
                 if (beats[i].time <= timer)
                 {
-                    GameObject newBeat = Instantiate(P1beatPrefab, spawnPoint);
+                    GameObject newBeat = Instantiate(beatPrefab, spawnPoint);
 
                     beatIcons.Add(newBeat);
 
@@ -92,7 +89,7 @@ public class RythmManager : MonoBehaviour
             {
                 if(i > beats.Count)
                 {
-                    P2isPlaying = false;
+                    isPlaying = false;
                 }
             }
         }
