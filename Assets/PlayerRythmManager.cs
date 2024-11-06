@@ -1,25 +1,27 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class RythmManager : MonoBehaviour
+public class PlayerRythmManager : MonoBehaviour
 {
+    public GameManager gameManager;
+    public string inputA;
+    public string inputB;
+
     public float timer = 0f;
 
     public List<Beat> beats;
     public List<GameObject> beatIcons;
 
     public bool isRecording = true;
-
     public bool isPlaying = false;
 
     public GameObject beatPrefab;
-
     public Transform spawnPoint;
 
     public int xPoint;
 
-    int i = 0;
-    int j = 0;
+    public int beatsCounter = 0;
+    public int j = 0;
 
     private void Start()
     {
@@ -30,14 +32,29 @@ public class RythmManager : MonoBehaviour
     {
         timer += Time.deltaTime;
 
-        if (Input.GetButtonDown("LeftClick") && isRecording)
+        //-----RECORDING-----
+        if (Input.GetButtonDown(inputA) && isRecording)
         {
+
             Beat beat = new Beat(true, timer);
 
             beats.Add(beat);
         }
 
-        if(Input.GetButtonDown("LeftClick") && isPlaying)
+        if (timer > 5f && isRecording)
+        {
+            isRecording = false;
+
+            timer = 0f;
+
+            gameManager.NextRound(beats);
+
+            beats.Clear();
+        }
+
+
+        //-----PLAYING-----
+        if (Input.GetButtonDown(inputA) && isPlaying)
         {
             try
             {
@@ -63,35 +80,34 @@ public class RythmManager : MonoBehaviour
             }
         }
 
-        if (timer > 10f && isRecording)
-        {
-            isRecording = false;
-            Debug.Log("Timer stoped at " + timer);
-
-            timer = 0f;
-            isPlaying = true;
-        }
-
         if (isPlaying)
         {
-            try
-            {
-                if (beats[i].time <= timer)
+            try {
+                if (beats[beatsCounter].time <= timer)
                 {
+                    Debug.Log("Spawn");
+
                     GameObject newBeat = Instantiate(beatPrefab, spawnPoint);
 
                     beatIcons.Add(newBeat);
 
-                    i++;
+                    beatsCounter++;
                 }
             }
-            catch
+            catch 
             {
-                if(i > beats.Count)
-                {
-                    isPlaying = false;
-                }
+                Debug.Log("Round Over");
+                isPlaying = false;
+                Invoke("StartRound", 5);
             }
+
         }
+    }
+
+    public void StartRound()
+    {
+        Debug.Log("New round started");
+        timer = 0f;
+        isRecording = true;
     }
 }
